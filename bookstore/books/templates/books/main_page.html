@@ -1,0 +1,33 @@
+{%extends 'base.html'%}
+{%block authorization%}
+{%endblock authorization%}
+
+{%block content%}
+
+{%for book in books%}
+
+<ul>
+    <li>
+        <a href="#" class="link-dark">"{{book.name}}"</a>
+        <p>
+            {%if book.author.1%}
+            Authors:
+            {%else%}
+            Author:
+            {%endif%}
+            {%for author in book.authors.all%}
+            <a href="#" class="link-dark">{{author.name}}</a>
+            {%endfor%}
+        </p>
+        <p>Price: {{book.price}}</p>
+    </li>
+</ul>
+
+{%endfor%}
+{%if prev.0%}
+    <a href="{%url 'main_with_num' page=prev.1%}" role="button"><-</a>
+{%endif%}
+{%if next.0%}
+    <a href="{%url 'main_with_num' page=next.1%}" role="button">-></a>
+{%endif%}
+{%endblock content%}

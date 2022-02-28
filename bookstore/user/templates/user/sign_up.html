@@ -1,0 +1,13 @@
+{%extends 'base.html'%}
+
+{%block authorization%}
+
+<form method="post">
+    {%csrf_token%}
+    <div class="container">
+        {{form.as_p}}
+        <input type="submit" value="Apply!"/>
+    </div>
+</form>
+
+{%endblock authorization%}

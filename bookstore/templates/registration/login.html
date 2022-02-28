@@ -1,0 +1,16 @@
+{%extends 'base.html'%}
+{%block title%}
+Log in!
+{%endblock title%}
+
+{%block authorization%}
+<form method="post">{%csrf_token%}
+    {{form.as_p}}
+    <input type="submit" value="Log in!"/>
+</form>
+<form method="get" action="{%url 'reset_pw'%}">
+    {%csrf_token%}
+    <input type="submit" value="Reset my password">
+</form>
+<a href="{%url 'sign_up'%}">Sign up!</a>
+{%endblock authorization%}
