@@ -8,7 +8,7 @@
 
 <ul>
     <li>
-        <a href="#" class="link-dark">"{{book.name}}"</a>
+        <a href="{%url 'book_page' pk=book.pk%}" class="link-dark">"{{book.name}}"</a>
         <p>
             {%if book.author.1%}
             Authors:
@@ -19,7 +19,7 @@
             <a href="#" class="link-dark">{{author.name}}</a>
             {%endfor%}
         </p>
-        <p>Price: {{book.price}}</p>
+        <p>Price: ${{book.price}}</p>
     </li>
 </ul>
 

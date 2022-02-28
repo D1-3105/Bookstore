@@ -23,5 +23,5 @@ urlpatterns = [
     path('accounts/', include("django.contrib.auth.urls")),
     path('', include('books.urls')),
     path('FORBIDDEN/', TemplateView.as_view(template_name='403.html'), name='403'),
-    path('NOT_FOUNT/', TemplateView.as_view(template_name='404.html'), name='404')
+    path('NOT_FOUND/', TemplateView.as_view(template_name='404.html'), name='404')
 ]

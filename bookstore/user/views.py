@@ -5,7 +5,7 @@ from .forms import CustomUserCreationForm, ResetEmailForm, CustomUserChangeForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import LoginView
 from django.db.models import Q
-from django.http.request import QueryDict
+
 
 class RegistrationView(View):
     template_name='user/sign_up.html'
@@ -52,7 +52,9 @@ class ResetViaEmailView(FormView):
         user.send_token(url=request.build_absolute_uri('/accounts/reset_me/'), type_ra='reset')
         return super().post(request, *args, **kwargs)
 
+
 class ResetPWView(FormView):
+
     template_name = 'user/reset.html'
     success_url = reverse_lazy('thanks')
     form_class = CustomUserChangeForm
@@ -89,6 +91,7 @@ class LoginWithCheck(LoginView):
             else:
                 return render(request, "user/check_box.html")
         except:
+            # means there is no such user.
             return redirect(reverse("404"))
         return super(LoginWithCheck, self).post(request, *args, **kwargs)
 # Create your views here.

@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import CharField, TextInput, EmailInput, PasswordInput, \
     Form, EmailField
 
+
 class CustomUserCreationForm(UserCreationForm):
     username = CharField(
         widget=TextInput(attrs={
@@ -62,4 +63,3 @@ class CustomUserChangeForm(UserChangeForm):
         if self.data['password'] == self.data['confirm']:
             return super().is_valid()
         return False
-

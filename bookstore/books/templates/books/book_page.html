@@ -1,0 +1,120 @@
+{%extends 'base.html'%}
+
+{%block title%}
+"{{book.name}}"
+{%endblock title%}
+
+{%block content%}
+<div class="container" style="text-align: justify;text-align-last: center;">
+    <h2>"{{book.name}}"</h2>
+    {%for author in book.authors.all%}
+        <a href = "#" class="link-light">{{author.name}}</a>
+    {%endfor%}
+    <h3>Rate:{{book.rate}}</h3>
+    <h3>Current price: ${{book.price}}</h3>
+    {%if book in user.owned_books.all%}
+        <form method="post">
+            {%csrf_token%}
+            <input type="submit" name="download" value="Download!"/>
+        </form>
+
+        <form method="post">
+            {%csrf_token%}
+            <div class="rating"> <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+                <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+            </div>
+            <textarea name="review" placeholder="Send your review!"></textarea><br>
+            <input type="submit" value="Send!"/>
+        </form>
+    {%else%}
+    <a href="{%url 'book_buy' pk=book.pk%}" role="button">Buy this book!</a>
+        {%if book in user.wish_list.all%}
+            <a href="{%url 'book_wished' pk=book.pk%}" role="button">Don't wish it!</a>
+        {%else%}
+            <a href="{%url 'book_wished' pk=book.pk%}" role="button">Wish it!</a>
+        {%endif%}
+    {%endif%}
+
+
+
+</div>
+<ul>
+        {%for review in reviews%}
+            <li>
+                <h6>Reviewer:<a href="#" class="link-light">{{review.author.username}}</a></h6>
+
+                <h6>Rate:{{review.review_rate}}
+                    <br>Text:{{review.review_text}}</h6>
+            </li>
+        {%endfor%}
+</ul>
+<style>
+    .rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center
+}
+
+.rating>input {
+    display: none
+}
+
+.rating>label {
+    position: relative;
+    width: 1em;
+    font-size: 6vw;
+    color: #FFD600;
+    cursor: pointer
+}
+
+.rating>label::before {
+    content: "\2605";
+    position: absolute;
+    opacity: 0
+}
+
+.rating>label:hover:before,
+.rating>label:hover~label:before {
+    opacity: 1 !important
+}
+
+.rating>input:checked~label:before {
+    opacity: 1
+}
+
+.rating:hover>input:checked~label:before {
+    opacity: 0.4
+}
+
+body {
+    background: #222225;
+    color: white
+}
+
+h1,
+p {
+    text-align: center
+}
+
+h1 {
+    margin-top: 150px
+}
+
+p {
+    font-size: 1.2rem
+}
+
+@media only screen and (max-width: 600px) {
+    h1 {
+        font-size: 14px
+    }
+
+    p {
+        font-size: 12px
+    }
+}
+</style>
+{%endblock content%}
