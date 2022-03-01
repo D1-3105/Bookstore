@@ -1,0 +1,114 @@
+{%extends 'base.html'%}
+
+{%block title%}
+Author: "{{author.name}}"
+{%endblock title%}
+
+{%block content%}
+<div class="container" style="text-align: justify;text-align-last: center;">
+    <h2>Author:{{author.name}}</h2>
+    <h3>Rating:{{author.rate}}</h3>
+    <center>
+        <h3>Written books:</h3>
+        <p>{%for book in author.published_books.all%}
+            <p><a class="link-light" href="{%url 'book_page' pk=book.pk%}">"{{book.name}}"</a> - <a href="{%url 'author' pk=book.authors.all.0.pk%}" class="link-light">{{book.authors.all.0.name}}{%if book.authors.all.1%}...{%endif%}</a><br>
+            Price:{{book.price}}<br>
+            </p>
+            {%endfor%}
+    </center>
+    <center>
+        {%if user.is_authenticated%}
+        <form method="post">
+            {%csrf_token%}
+            <div class="rating">
+                <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+                <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+            </div>
+            <textarea name="review" placeholder="Send your review!"></textarea><br>
+            <input type="submit" value="Send!"/>
+        </form>
+        {%endif%}
+    </center>
+
+</div>
+<ul>
+        {%if reviews%}
+        {%for review in reviews.all%}
+            <li>
+                <h6>Reviewer:<a href="{%url 'profile' pk=review.reviewer.pk%}" class="link-light">{{review.reviewer.username}}</a></h6>
+                <h6>Rate:{{review.review_rate}}
+                    <br>Text:{{review.review_text}}</h6>
+            </li>
+        {%endfor%}
+        {%endif%}
+</ul>
+<style>
+    .rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center
+}
+
+.rating>input {
+    display: none
+}
+
+.rating>label {
+    position: relative;
+    width: 1em;
+    font-size: 6vw;
+    color: #FFD600;
+    cursor: pointer
+}
+
+.rating>label::before {
+    content: "\2605";
+    position: absolute;
+    opacity: 0
+}
+
+.rating>label:hover:before,
+.rating>label:hover~label:before {
+    opacity: 1 !important
+}
+
+.rating>input:checked~label:before {
+    opacity: 1
+}
+
+.rating:hover>input:checked~label:before {
+    opacity: 0.4
+}
+
+body {
+    background: #222225;
+    color: white
+}
+
+h1,
+p {
+    text-align: center
+}
+
+h1 {
+    margin-top: 150px
+}
+
+p {
+    font-size: 1.2rem
+}
+
+@media only screen and (max-width: 600px) {
+    h1 {
+        font-size: 14px
+    }
+
+    p {
+        font-size: 12px
+    }
+}
+</style>
+{%endblock content%}
