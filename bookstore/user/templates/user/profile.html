@@ -1,0 +1,46 @@
+{%extends 'base.html'%}
+
+{%block authorization%}
+{%if authed is 1%}
+<div>
+    <a href="{%url 'logout'%}" class="btn btn-danger" role="button">Logout!</a>
+    <a href="#" class="btn btn-light" role="button">Balance: ${{user1.balance}}</a>
+</div>
+{%endif%}
+{%endblock authorization%}
+
+{%block content%}
+
+<ul>
+    <div>
+        <center >
+            <h2>User:{{user1.username}}</h2>
+        </center>
+    </div>
+    <div>
+        <center style="background: #fdf4e3;">
+            <h3>Owned books:</h3>
+
+            <p style="color">
+                {%for book in user1.owned_books.all%}
+                <p><a class="link-dark" href="{%url 'book_page' pk=book.pk%}">"{{book.name}}"</a> - <a href="#" class="link-dark">{{book.authors.all.0.name}}{%if book.authors.all.1%}...{%endif%}</a><br><br>
+                </p>
+                {%endfor%}
+            </p>
+        </center>
+    </div>
+    <div>
+        <center style="background: #fdf4e3;">
+            <h3>Wish list:</h3>
+            <p>
+                {%for book in user1.wish_list.all%}
+            <p><a href="{%url 'book_page' pk=book.pk%}">"{{book.name}}"</a> - <a>{{book.authors.all.0.name}}{%if book.authors.all.1%}...{%endif%}</a><br>
+            Price:{{book.price}}<br>
+            </p>
+                {%endfor%}
+            </p>
+        </center>
+    </div>
+</ul>
+
+{%endblock content%}
