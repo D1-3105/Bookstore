@@ -5,6 +5,8 @@ from .models import Books, Reviews2Books
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import HttpResponse
+from django.conf import settings
+from django.contrib.auth import get_user_model
 
 class MainView(View):
     model = Books
@@ -53,8 +55,8 @@ class BookPageView(View):
     def post(self, request, **kwargs):
         req=request.POST
         book = Books.objects.get(pk=kwargs['pk'])
-
-        if req['rating']:
+        print(req)
+        if req.get('rating', None):
             # save review!
             reviews = Reviews2Books.objects.filter(book=book).all()
             review=None
@@ -79,10 +81,11 @@ class BookPageView(View):
         if req['download']:
             # send file!
             book = Books.objects.get(pk=kwargs['pk'])
-            if book in request.user.owned_books:
-                file_location = "books data/" + book.path
+            if book in request.user.owned_books.all():
+                file_location = settings.BOOKS_DATA + book.path
+                print(file_location)
                 try:
-                    with open(file_location) as f:
+                    with open(file_location, 'rb') as f:
                         file_data = f.read()
                     response = HttpResponse(file_data, headers={
                         'Content-Type': 'application/pdf',
@@ -127,5 +130,3 @@ class WishAppendView(View, LoginRequiredMixin):
         else:
             request.user.wish_list.add(book)
         return redirect(reverse('book_page', args=str(kwargs['pk'])))
-
-# Create your views here.

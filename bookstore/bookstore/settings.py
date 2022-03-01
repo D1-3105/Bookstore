@@ -124,6 +124,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+BOOKS_DATA='D:\\Projects\\bookstore\\bookstore\\books\\books data\\' # change for current directory.
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -136,3 +138,5 @@ SERVER_MAIL='lyerhd@gmail.com'
 LOGIN_REDIRECT_URL='main_page'
 LOGOUT_REDIRECT_URL='login'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+

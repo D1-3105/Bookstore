@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.views.generic import View, FormView
 from .forms import CustomUserCreationForm, ResetEmailForm, CustomUserChangeForm
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, mixins
 from django.contrib.auth.views import LoginView
 from django.db.models import Q
 
@@ -94,4 +94,19 @@ class LoginWithCheck(LoginView):
             # means there is no such user.
             return redirect(reverse("404"))
         return super(LoginWithCheck, self).post(request, *args, **kwargs)
-# Create your views here.
+
+
+class ProfileView(View, mixins.LoginRequiredMixin):
+    login_url = reverse_lazy('login')
+    template_name='user/profile.html'
+
+    def get(self, request, **kwargs):
+        authed= request.user.pk is kwargs['pk']
+        context={}
+        if authed:
+            context['authed']= 1
+            context['user1']=request.user
+        else:
+            context['user1']=get_user_model().objects.get(pk=kwargs['pk'])
+        return render(request, self.template_name, context=context)
+

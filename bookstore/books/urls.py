@@ -7,4 +7,5 @@ urlpatterns=[
     path('book/id<int:pk>', BookPageView.as_view(), name='book_page'),
     path('book/id<int:pk>/buy', BookBuyView.as_view(), name='book_buy'),
     path('book/id<int:pk>/wish_list', WishAppendView.as_view(), name='book_wished'),
+
 ]
