@@ -16,7 +16,7 @@
             Author:
             {%endif%}
             {%for author in book.authors.all%}
-            <a href="#" class="link-dark">{{author.name}}</a>
+            <a href="{%url 'author' pk=author.pk%}" class="link-dark">{{author.name}}</a>
             {%endfor%}
         </p>
         <p>Price: ${{book.price}}</p>

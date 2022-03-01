@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.views.generic import View, TemplateView
-from .models import Books, Reviews2Books
+from .models import Books, Reviews2Books, Authors, Reviews2Authors
 from django.db.models import Q
+from django.forms import ValidationError
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import HttpResponse
 from django.conf import settings
@@ -58,25 +59,14 @@ class BookPageView(View):
         print(req)
         if req.get('rating', None):
             # save review!
-            reviews = Reviews2Books.objects.filter(book=book).all()
-            review=None
-            try:
-                review=Reviews2Books.objects.get(Q(book=book)|Q(author=request.user))
-            except:
-                review = Reviews2Books()
-                review.author = request.user
-                review.book=book
-            review.review_rate = int(req['rating'])
-            if req['review']:
-                review.review_text = req['review']
-            review.save()
-
-            reviews = Reviews2Books.objects.filter(book=book).all()
-
-            book.rating=(book.rate+int(review.review_rate))/reviews.count()
-            return render(request, self.template_name, context={"book": book,
-                                                                "reviews": reviews
-                                                                })
+            review=Reviews2Books(
+                author=request.user,
+                book=book,
+                review_rate=request.POST.get('rating', None),
+                review_text=request.POST.get('review', '')
+            )
+            Reviews2Books.objects.create_review_book(review, book)
+            return self.get(request, **kwargs)
 
         if req['download']:
             # send file!
@@ -130,3 +120,33 @@ class WishAppendView(View, LoginRequiredMixin):
         else:
             request.user.wish_list.add(book)
         return redirect(reverse('book_page', args=str(kwargs['pk'])))
+
+
+class AuthorView(View):
+    template_name="books/author_profile.html"
+
+    def get(self, request, **kwargs):
+        author=Authors.objects.get(pk=kwargs['pk'])
+        print(author.published_books.all())
+        reviews=""
+        context = {
+            'author': author,
+        }
+        try:
+            reviews= Reviews2Authors.objects.filter(author=author).all()
+            context['reviews']=reviews
+        except:
+            pass
+        return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request, **kwargs):
+        author=Authors.objects.get(pk=kwargs['pk'])
+        if request.POST.get('rating', None):
+            print(request.POST.get('rating', None))
+            review=Reviews2Authors(author=author, reviewer=request.user,
+                                   review_rate=request.POST.get('rating', None),
+                                   review_text=request.POST.get('review', ''))
+            Reviews2Authors.objects.create_review_author(review, author)
+            return self.get(request, **kwargs)
+        else:
+            return redirect(reverse('404'))

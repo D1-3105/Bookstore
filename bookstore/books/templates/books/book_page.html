@@ -8,7 +8,7 @@
 <div class="container" style="text-align: justify;text-align-last: center;">
     <h2>"{{book.name}}"</h2>
     {%for author in book.authors.all%}
-        <a href = "#" class="link-light">{{author.name}}</a>
+        <a href = "{%url 'author' pk=author.pk%}" class="link-light">{{author.name}}</a>
     {%endfor%}
     <h3>Rate:{{book.rate}}</h3>
     <h3>Current price: ${{book.price}}</h3>
@@ -45,7 +45,6 @@
         {%for review in reviews%}
             <li>
                 <h6>Reviewer:<a href="{%url 'profile' pk=review.author.pk%}" class="link-light">{{review.author.username}}</a></h6>
-
                 <h6>Rate:{{review.review_rate}}
                     <br>Text:{{review.review_text}}</h6>
             </li>

@@ -132,11 +132,10 @@ BOOKS_DATA='D:\\Projects\\bookstore\\bookstore\\books\\books data\\' # change fo
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#authorization
+# authorization
+
 AUTH_USER_MODEL="user.CustomUser"
 SERVER_MAIL='lyerhd@gmail.com'
 LOGIN_REDIRECT_URL='main_page'
 LOGOUT_REDIRECT_URL='login'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-
