@@ -7,7 +7,7 @@ class Books(models.Model):
     authors=models.ManyToManyField("Authors", related_name= "books_BooksToAuthor")
     name=models.TextField()
     volume=models.BigIntegerField()
-    price=models.DecimalField(max_digits=10,decimal_places=2)
+    price=models.FloatField()
     downloads=models.BigIntegerField()
     rate=models.FloatField(default=0)
     # reviews=models.ManyToManyField("Reviews2Books", related_name= "books_BooksToReviews")
@@ -45,10 +45,11 @@ class ReviewsManager(models.Manager):
             rev_count=Reviews2Authors.objects.filter(author=author).count()
             author.rate=author.rate-float(review_prev.review_rate)/rev_count+float(review.review_rate)/rev_count
             review_prev.review_rate=review.review_rate
+            review_prev.review_text=review.review_text
             review=review_prev
         except models.ObjectDoesNotExist:
             rev_count = Reviews2Authors.objects.filter(author=author).count()
-            author.rate = author.rate + float(review.review_rate) / (rev_count+1)# +1 because review is not created!
+            author.rate = (author.rate + float(review.review_rate)) / (rev_count+1)# +1 because review is not created!
         finally:
             review.save()
             author.save()
@@ -62,10 +63,11 @@ class ReviewsManager(models.Manager):
             book.rate = book.rate - float(review_prev.review_rate) / rev_count + float(
                 review.review_rate) / rev_count
             review_prev.review_rate = review.review_rate
+            review_prev.review_text = review.review_text
             review = review_prev
-        except:
+        except models.ObjectDoesNotExist:
             rev_count = Reviews2Books.objects.filter(book=book).count()
-            book.rate = book.rate + float(review.review_rate) / (rev_count + 1)  # +1 because review is not created!
+            book.rate = (book.rate + float(review.review_rate)) / (rev_count + 1)  # +1 because review is not created!
         finally:
             review.save()
             book.save()

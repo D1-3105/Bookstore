@@ -134,4 +134,5 @@ def charge(request):
             source=request.POST['stripeToken']
         )
         request.user.increment_balance(float(request.POST['amount_get']))
+        request.user.save()
         return render(request, "user/charge.html")

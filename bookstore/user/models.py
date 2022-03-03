@@ -8,7 +8,7 @@ import random
 
 class CustomUser(AbstractUser):
 
-    balance = FloatField()
+    balance = FloatField(default=0)
     owned_books = ManyToManyField("books.Books", "users_Owned_Books", blank=True, default=0)
     reviews_sent = BigIntegerField(blank=True, null=True, default=0)
     wish_list = ManyToManyField("books.Books", "users_Wish_List", blank=True)

@@ -105,6 +105,7 @@ class BookBuyView(View, LoginRequiredMixin):
             request.user.owned_books.add(book)
             if book in request.user.wish_list.all():
                 request.user.wish_list.remove(book)
+            request.user.save()
         return redirect(reverse('book_page', args=str(kwargs['pk'])))
 
 
