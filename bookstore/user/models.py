@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AbstractUser
-from django.db.models import DecimalField, ManyToManyField, BigIntegerField, TextField, BooleanField
+from django.db.models import FloatField, ManyToManyField, BigIntegerField, TextField, BooleanField
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.conf import settings
@@ -8,7 +8,7 @@ import random
 
 class CustomUser(AbstractUser):
 
-    balance = DecimalField(max_digits=10, decimal_places=2, default=0)
+    balance = FloatField()
     owned_books = ManyToManyField("books.Books", "users_Owned_Books", blank=True, default=0)
     reviews_sent = BigIntegerField(blank=True, null=True, default=0)
     wish_list = ManyToManyField("books.Books", "users_Wish_List", blank=True)

@@ -11,6 +11,11 @@ services:
       - db
     links:
       - db:db
+    environment:
+      - DEBUG=True
+      - STRIPE_TEST_PUBLISHABLE_KEY=pk_test_51KZINkIRFuihjY1FZF1FE3vaB36f7DPYe2ybw64u4E2rmPha6D02jltMcZuUU9eSDP3dUY4a0B4AU6B1MMIs4Lt000i9iByloG
+      - STRIPE_TEST_SECRET_KEY=sk_test_51KZINkIRFuihjY1F0sQ9uc8IqaAiUtQoiNZJdC3dptg2LMJv5MHmb19kM653JaXVJvGGE10HFGwN8IYUqX4jcWee005KACPMBz
+
   db:
     image: postgres:14
     environment:

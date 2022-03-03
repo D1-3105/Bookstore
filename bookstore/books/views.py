@@ -1,13 +1,11 @@
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
-from django.views.generic import View, TemplateView
+from django.views.generic import View
 from .models import Books, Reviews2Books, Authors, Reviews2Authors
-from django.db.models import Q
-from django.forms import ValidationError
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import HttpResponse
 from django.conf import settings
-from django.contrib.auth import get_user_model
+
 
 class MainView(View):
     model = Books

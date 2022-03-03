@@ -35,7 +35,7 @@
       </li>
         {%if user.is_authenticated%}
         <li class="nav-item">
-            <a class="nav-link" href="#">Your balance: {{user.balance}}</a>
+            <a class="nav-link" href="{%url 'balance'%}">Your balance: {{user.balance}}</a>
         </li>
       <li class="nav-item">
             <a class="nav-link" href="{%url 'logout'%}">Log out!</a>

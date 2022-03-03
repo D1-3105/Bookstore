@@ -1,0 +1,17 @@
+{%extends 'base.html'%}
+
+{%block title%}
+Payment
+{%endblock title%}
+{%block content%}
+<h2>Fee:</h2>
+<form action="{% url 'charge'%}" method="post">
+    {% csrf_token %}
+    <input type="number" min="0" placeholder="Enter your payment in $" id="val" name="amount_get"/>
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    data-key="{{ stripe_key }}" data-description="Payment"
+    data-amount="document.getElementById('val').value*100"
+    data-locale="auto"></script>
+</form>
+{%endblock content%}
+
