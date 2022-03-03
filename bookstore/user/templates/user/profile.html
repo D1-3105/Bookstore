@@ -34,7 +34,7 @@
             <h3>Wish list:</h3>
             <p>{%for book in user1.wish_list.all%}
             <p><a class="link-dark" href="{%url 'book_page' pk=book.pk%}">"{{book.name}}"</a> - <a href="{%url 'author' pk=book.authors.all.0.pk%}" class="link-dark">{{book.authors.all.0.name}}{%if book.authors.all.1%}...{%endif%}</a><br>
-            Price:{{book.price}}<br>
+            Price: ${{book.price}}<br>
             </p>
                 {%endfor%}
             </p>

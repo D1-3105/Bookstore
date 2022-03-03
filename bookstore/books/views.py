@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.views.generic import View
 from .models import Books, Reviews2Books, Authors, Reviews2Authors
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import HttpResponse
 from django.conf import settings
 
@@ -10,6 +9,7 @@ from django.conf import settings
 class MainView(View):
     model = Books
     template_name = 'books/main_page.html'
+
     def getUser(self):
         if self.request.user.is_authenticated:
             return self.request.user
@@ -94,9 +94,7 @@ class BookPageView(View):
         return render(request, self.template_name, context=context)
 
 
-class BookBuyView(View, LoginRequiredMixin):
-    login_url = reverse_lazy('login')
-
+class BookBuyView(View):
     def get(self, request, **kwargs):
         book=Books.objects.get(pk=kwargs['pk'])
         if request.user.balance>=book.price and book not in request.user.owned_books.all():
@@ -109,15 +107,18 @@ class BookBuyView(View, LoginRequiredMixin):
         return redirect(reverse('book_page', args=str(kwargs['pk'])))
 
 
-class WishAppendView(View, LoginRequiredMixin):
+class WishAppendView(View):
     login_url = reverse_lazy('login')
 
     def get(self, request, **kwargs):
-        book=Books.objects.get(pk=kwargs['pk'])
-        if book in request.user.wish_list.all():
-            request.user.wish_list.remove(book)
-        else:
-            request.user.wish_list.add(book)
+        try:
+            book=Books.objects.get(pk=kwargs['pk'])
+            if book in request.user.wish_list.all():
+                request.user.wish_list.remove(book)
+            else:
+                request.user.wish_list.add(book)
+        except:
+            return redirect(self.login_url)
         return redirect(reverse('book_page', args=str(kwargs['pk'])))
 
 
