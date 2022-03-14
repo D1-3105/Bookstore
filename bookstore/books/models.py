@@ -4,13 +4,12 @@ from django.db import models
 
 
 class Books(models.Model):
-    authors=models.ManyToManyField("Authors", related_name= "books_BooksToAuthor")
+    authors=models.ManyToManyField("Authors", related_name= "books_BooksToAuthor", blank=True)
     name=models.TextField()
     volume=models.BigIntegerField()
     price=models.FloatField()
     downloads=models.BigIntegerField()
     rate=models.FloatField(default=0)
-    # reviews=models.ManyToManyField("Reviews2Books", related_name= "books_BooksToReviews")
     published=models.BooleanField(default=True)
     path=models.TextField(blank=True)
     available= models.BooleanField(default=True)
@@ -24,7 +23,7 @@ class Books(models.Model):
 
 
 class Authors(models.Model):
-    published_books=models.ManyToManyField("Books", related_query_name='books_AuthorPublished')
+    published_books=models.ManyToManyField("Books", related_query_name='books_AuthorPublished', blank=True)
     rate=models.FloatField(default=0)
     name=models.TextField(default='')
     bio= models.TextField(blank=True)
@@ -35,6 +34,7 @@ class Authors(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class ReviewsManager(models.Manager):
 
@@ -92,3 +92,4 @@ class Reviews2Authors(models.Model):
     objects=ReviewsManager()
     class Meta:
         unique_together=['reviewer', 'author']
+

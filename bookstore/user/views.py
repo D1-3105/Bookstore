@@ -10,7 +10,9 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 stripe.api_key=settings.STRIPE_SEC_KEY
 
+
 class RegistrationView(View):
+
     template_name = 'user/sign_up.html'
     form_class = CustomUserCreationForm
 

@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
-from django.views.generic import View
+from django.views.generic import View, ListView
 from .models import Books, Reviews2Books, Authors, Reviews2Authors
 from django.http.response import HttpResponse
 from django.conf import settings
+from django.db.models import Q
 
 
 class MainView(View):
@@ -150,3 +151,29 @@ class AuthorView(View):
             return self.get(request, **kwargs)
         else:
             return redirect(reverse('404'))
+
+
+class SearchView(ListView):
+
+    template_name='books/search.html'
+    model = Books
+    context_object_name = 'books'
+
+    def get_queryset(self):
+        req=str(self.request.GET.get('search_inp'))
+        page=int(self.request.GET.get('num', 1))
+
+        objects=Books.objects.filter(
+            Q(authors__name__icontains=req)|Q(name__icontains=req)
+        )[10*(page-1):10*page]
+        return objects
+
+    def get_context_data(self, **kwargs):
+        data=super().get_context_data(**kwargs)
+        data['title']='Page '+str(self.request.GET.get('page', 1))
+        if len(data['books'])>0:
+            data['next']=self.request.GET.get('num',1)+1
+            if data['next']>2:
+                data['prev']=self.request.GET.get('num')-1
+        return data
+

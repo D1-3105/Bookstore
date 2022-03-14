@@ -1,0 +1,29 @@
+{%extends 'base.html'%}
+{%block content%}
+{%for book in books%}
+
+    <ul>
+    <li>
+        <a href="{%url 'book_page' pk=book.pk%}" class="link-dark">"{{book.name}}"</a>
+        <p>
+            {%if book.author.1%}
+            Authors:
+            {%else%}
+            Author:
+            {%endif%}
+            {%for author in book.authors.all%}
+            <a href="{%url 'author' pk=author.pk%}" class="link-dark">{{author.name}}</a>
+            {%endfor%}
+        </p>
+        <p>Price: ${{book.price}}</p>
+    </li>
+</ul>
+
+{%endfor%}
+{%if prev%}
+    <a href="{%url 'search_with_page' num=prev%}" role="button"><-</a>
+{%endif%}
+{%if next%}
+    <a href="{%url 'search_with_page' num=next%}" role="button">-></a>
+{%endif%}
+{%endblock content%}
