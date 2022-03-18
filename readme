@@ -1,0 +1,2 @@
+To launch proj on localhost edit settings.py (via editting database dict)
+To launch on docker edit settings.py+edit docker-compose.yml
